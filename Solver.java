@@ -79,7 +79,7 @@ public class Solver
     {
         if (solvable)
         {
-            return moves;
+            return solved.getMoves();
         }
         return -1;
     }

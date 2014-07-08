@@ -15,6 +15,9 @@ public class Solver
         BoardNode twin = new BoardNode(initial.twin(), -1, null);
         MinPQ<BoardNode> currentQueue = new MinPQ<BoardNode>(new BoardComparator());
         MinPQ<BoardNode> twinQueue = new MinPQ<BoardNode>(new BoardComparator());
+        int iterations = 0;
+        int N = current.getBoard().dimension();
+        int max = N*N*N*N*N*N*N; // N^7
         
         while (true)
         {
@@ -24,7 +27,7 @@ public class Solver
                 solved = current;
                 break;
             }
-            if (twin.getBoard().isGoal())
+            if (twin.getBoard().isGoal() || iterations > max)
             {
                 break;
             }
@@ -46,6 +49,7 @@ public class Solver
             }
             current = currentQueue.delMin();
             twin = twinQueue.delMin();
+            iterations++;
         }
     }
     

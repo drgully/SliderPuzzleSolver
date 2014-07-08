@@ -2,25 +2,21 @@ import java.util.Comparator;
 
 public class Solver
 {
-    private int N, moves;
     private boolean solvable;
     private BoardNode solved;
     
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial)
     {
-        N = initial.dimension();
-        moves = 0;
         solvable = false;
         solved = null;
         
         BoardNode current = new BoardNode(initial, -1, null);
-        //BoardNode twin = new BoardNode(initial.twin(), -1, null);
+        BoardNode twin = new BoardNode(initial.twin(), -1, null);
         MinPQ<BoardNode> currentQueue = new MinPQ<BoardNode>(new BoardComparator());
-        //MinPQ<BoardNode> twinQueue = new MinPQ<BoardNode>(new BoardComparator());
+        MinPQ<BoardNode> twinQueue = new MinPQ<BoardNode>(new BoardComparator());
         
-        int max = getMax();
-        while (moves < max)
+        while (true)
         {
             if (current.getBoard().isGoal())
             {
@@ -28,12 +24,10 @@ public class Solver
                 solved = current;
                 break;
             }
-            /*
             if (twin.getBoard().isGoal())
             {
                 break;
             }
-            */
             for (Board board: current.getBoard().neighbors())
             {
                 if (!board.equals(current.getBoard()))
@@ -42,7 +36,6 @@ public class Solver
                     currentQueue.insert(neighbor);
                 }
             }
-            /*
             for (Board board: twin.getBoard().neighbors())
             {
                 if (!board.equals(twin.getBoard()))
@@ -51,21 +44,9 @@ public class Solver
                     twinQueue.insert(neighbor);
                 }
             }
-            */
             current = currentQueue.delMin();
-            //twin = twinQueue.delMin();
-            moves++;
+            twin = twinQueue.delMin();
         }
-    }
-    
-    private int getMax()
-    {
-        if (N == 1) return 0;
-        else if (N == 2) return 6;
-        else if (N == 3) return 31;
-        else if (N == 4) return 80;
-        else if (N == 5) return 152;
-        else             return N*N*N;
     }
     
     // is the initial board solvable?

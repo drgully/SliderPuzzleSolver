@@ -2,6 +2,7 @@ public class Board
 {
     private final int N;
     private int[][] board;
+    private int distances;
     
     // construct a board from an N-by-N array of blocks
     // (where blocks[i][j] = block in row i, column j)
@@ -16,6 +17,7 @@ public class Board
                 board[i][j] = blocks[i][j]; 
             }
         }
+        distances = -1;
     }
     
     // board dimension N
@@ -51,27 +53,30 @@ public class Board
     // sum of Manhattan distances between blocks and goal
     public int manhattan()
     {
-        int distances = 0;
-        for (int i = 0; i < N; i++)
+        if (distances == -1)
         {
-            for (int j = 0; j < N; j++)
+            distances = 0;
+            for (int i = 0; i < N; i++)
             {
-                if ((i == N - 1) && (j == N - 1))
+                for (int j = 0; j < N; j++)
                 {
-                    if (board[i][j] != 0)
+                    if ((i == N - 1) && (j == N - 1))
+                    {
+                        if (board[i][j] != 0)
+                        {
+                            int outOfPlace = board[i][j];
+                            int properI = Math.abs((outOfPlace - 1) / N);
+                            int properJ = Math.abs((outOfPlace - 1) % N);
+                            distances += Math.abs(properI - i) + Math.abs(properJ - j);
+                        }
+                    }
+                    else if ((board[i][j] != 0) && (board[i][j] != (i * N + j + 1)))
                     {
                         int outOfPlace = board[i][j];
                         int properI = Math.abs((outOfPlace - 1) / N);
                         int properJ = Math.abs((outOfPlace - 1) % N);
                         distances += Math.abs(properI - i) + Math.abs(properJ - j);
                     }
-                }
-                else if ((board[i][j] != 0) && (board[i][j] != (i * N + j + 1)))
-                {
-                    int outOfPlace = board[i][j];
-                    int properI = Math.abs((outOfPlace - 1) / N);
-                    int properJ = Math.abs((outOfPlace - 1) % N);
-                    distances += Math.abs(properI - i) + Math.abs(properJ - j);
                 }
             }
         }
